@@ -1,0 +1,32 @@
+{{- $items := slice -}}
+{{- range .Site.RegularPages -}}
+  {{- $item := dict
+      "type"       "post"
+      "title"      .Title
+      "url"        .RelPermalink
+      "content"    .Plain
+      "categories" (.Params.categories | default (slice))
+      "tags"       (.Params.tags       | default (slice)) -}}
+  {{- $items = $items | append $item -}}
+{{- end -}}
+{{- range $name, $_ := .Site.Taxonomies.categories -}}
+  {{- $item := dict
+      "type"    "category"
+      "title"   $name
+      "url"     (printf "/categories/%s/" ($name | urlize))
+      "content" ""
+      "categories" (slice)
+      "tags"       (slice) -}}
+  {{- $items = $items | append $item -}}
+{{- end -}}
+{{- range $name, $_ := .Site.Taxonomies.tags -}}
+  {{- $item := dict
+      "type"    "tag"
+      "title"   $name
+      "url"     (printf "/tags/%s/" ($name | urlize))
+      "content" ""
+      "categories" (slice)
+      "tags"       (slice) -}}
+  {{- $items = $items | append $item -}}
+{{- end -}}
+{{- $items | jsonify -}}

@@ -1,0 +1,28 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+
+<input type="search" id="terms-search" class="inline-search"
+  placeholder="Filter {{ .Data.Plural }}…" autocomplete="off">
+
+<ul class="tag-list" id="terms-list">
+  {{ range .Data.Terms.ByCount }}
+  <li data-name="{{ .Page.Title | lower }}">
+    <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a>
+    <span class="count">{{ .Count }}</span>
+  </li>
+  {{ end }}
+</ul>
+
+<script>
+(function () {
+  var input = document.getElementById('terms-search');
+  var items = document.querySelectorAll('#terms-list li');
+  input.addEventListener('input', function () {
+    var q = this.value.toLowerCase().trim();
+    items.forEach(function (item) {
+      item.style.display = (!q || item.dataset.name.indexOf(q) !== -1) ? '' : 'none';
+    });
+  });
+}());
+</script>
+{{ end }}
