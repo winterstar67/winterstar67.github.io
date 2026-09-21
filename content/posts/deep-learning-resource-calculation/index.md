@@ -8,7 +8,7 @@ categories: ["Experiments", "Fundamentals"]
 description: ""
 ---
 
-The implementation and experiment code is on [GitHub](https://github.com/winterstar67/model-efficiency-lab/tree/main/Memory%20measurement).
+The implementation and experiment code is on [GitHub](https://github.com/winterstar67/AI-Experiments/tree/main/Memory%20measurement).
 
 # 1. Introduction
 These days, a GPU is an essential resource to handle deep learning because of its huge number of operations.
@@ -209,7 +209,7 @@ return y
 	- Token embedding: $38$MB
 	- Position embedding: $3$MB
 	- CausalSelfAttention: $38 + 114 + 1,208 = 1,360$ MB
-- [Test code link](https://github.com/winterstar67/model-efficiency-lab/blob/main/Memory%20measurement/One_selfattention/SelfAttention_Memory.py#L200)
+- [Test code link](https://github.com/winterstar67/AI-Experiments/blob/main/Memory%20measurement/One_selfattention/SelfAttention_Memory.py#L200)
 
 #### 4-1-2-4. MLP forward
 ```
@@ -287,7 +287,7 @@ $498$(Model parameter) + $5025$(Activations) = $5523.1$ MB
 - The peak memorys in Memory vize and hand-driven one are similar 
 	- Memory viz: $5.580$GB
 	- hand-driven: $5.523$GB
-- [Test code link](https://github.com/winterstar67/model-efficiency-lab/blob/main/Memory%20measurement/First_batch/First_Batch_Memory.py#L200)
+- [Test code link](https://github.com/winterstar67/AI-Experiments/blob/main/Memory%20measurement/First_batch/First_Batch_Memory.py#L200)
 
 # 8. Discussion
 The hand-derived calculation would not be 100% correct because there could be uncovered operations inside PyTorch that have C++/CUDA implementations which are at a lower level than torch code written by humans.

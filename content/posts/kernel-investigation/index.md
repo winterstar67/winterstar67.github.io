@@ -8,7 +8,7 @@ categories: ["Experiments"]
 description: ""
 ---
 
-The implementation and experiment code is on [GitHub](https://github.com/winterstar67/model-efficiency-lab/tree/main/Kernel%20investigation).
+The implementation and experiment code is on [GitHub](https://github.com/winterstar67/AI-Experiments/tree/main/Kernel%20investigation).
 
 Related posts:
 - {{< wikilink "factors-to-consider-in-cuda-and-gpu" >}}

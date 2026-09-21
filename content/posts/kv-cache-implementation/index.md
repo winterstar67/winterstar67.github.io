@@ -8,7 +8,7 @@ categories: ["Experiments"]
 description: ""
 ---
 
-The implementation and experiment code is on [GitHub](https://github.com/winterstar67/model-efficiency-lab/tree/main/KV%20Cache)
+The implementation and experiment code is on [GitHub](https://github.com/winterstar67/AI-Experiments/tree/main/KV%20Cache)
 
 # 1. Introduction
 In this post, I'll implement KV cache using [nanoGPT](https://github.com/karpathy/nanoGPT), which is small, simple, and clearly implemented.

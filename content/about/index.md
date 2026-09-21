@@ -24,7 +24,7 @@ This blog is organized around two axes:
 
 # Hands-on Experiments
 <p class="note">Posts here are listed in descending order of importance.<br>
-Most of the experiment code is in <a href="https://github.com/winterstar67/model-efficiency-lab">https://github.com/winterstar67/model-efficiency-lab</a></p>
+Most of the experiment code is in <a href="https://github.com/winterstar67/AI-Experiments">https://github.com/winterstar67/AI-Experiments</a></p>
 
 ## [KV Cache Analysis](/posts/kv-cache-implementation/) {#kv-cache-analysis}
 <img class="thumb" src="kv-cache.png" alt="KV Cache">

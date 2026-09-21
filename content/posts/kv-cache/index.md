@@ -83,5 +83,5 @@ No.
 
 # 3. The efficiency from KV cache
 How much is it fast?
-- Execution time test code: https://github.com/winterstar67/model-efficiency-lab/tree/main/KV%20Cache
+- Execution time test code: https://github.com/winterstar67/AI-Experiments/tree/main/KV%20Cache
 - Execution time experiment: https://winterstar67.github.io/posts/kv-cache-implementation/
