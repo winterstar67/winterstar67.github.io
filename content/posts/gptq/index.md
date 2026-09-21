@@ -21,10 +21,10 @@ All codes and results are in Github
 	- Cholesky decomposition
 		- It's known as $A=LL^T$ decomposition too.
 	- Schur complement
-		- In an $n$ x $n$ square matrix A $$A = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}A_{11} & A_{12} \\ A_{21} & A_{22} \\\end{array}\right)$$, Schur complement is $A/A_{11} = A_{22} - A_{21} A^{-1}_{11} A_{12}$
+		- In an $n$ x $n$ square matrix A $$A = \left(\begin{array}{cccc}A_{11} & A_{12} \\ A_{21} & A_{22} \\\end{array}\right)$$, Schur complement is $A/A_{11} = A_{22} - A_{21} A^{-1}_{11} A_{12}$
 			- $A_{11}$ - $A_{22}$: Block matrices
 	- Inverse block matrix
-		- The inverse of an $n$ x $n$ square matrix $A = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}A_{11} & A_{12} \\ A_{21} & A_{22} \\\end{array}\right)$ is $$A^{-1} = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}A_{11}^{-1} + A_{11}^{-1}A_{12}S^{-1}A_{21}A_{11}^{-1} & -A_{11}^{-1}A_{12}S^{-1} \\ -S^{-1}A_{21}A_{11}^{-1} & S^{-1} \\\end{array}\right)$$ where $S = A/A_{11} = A_{22} - A_{21} A^{-1}_{11} A_{12}$
+		- The inverse of an $n$ x $n$ square matrix $A = \left(\begin{array}{cccc}A_{11} & A_{12} \\ A_{21} & A_{22} \\\end{array}\right)$ is $$A^{-1} = \left(\begin{array}{cccc}A_{11}^{-1} + A_{11}^{-1}A_{12}S^{-1}A_{21}A_{11}^{-1} & -A_{11}^{-1}A_{12}S^{-1} \\ -S^{-1}A_{21}A_{11}^{-1} & S^{-1} \\\end{array}\right)$$ where $S = A/A_{11} = A_{22} - A_{21} A^{-1}_{11} A_{12}$
 	- Eigenvalues of the inverse of a matrix A 
 		- If matrix $A$ is diagonalizable to be $A = Q\Lambda Q^T$, the inverse of matrix $A$, $A^{-1}$ is diagonalizable into $A^{-1} = Q\Lambda^{-1}Q^T$. Here, $\Lambda^{-1}$ has reciprocal elements of $\Lambda$.
 			- $\Lambda$: Eigenvalues
@@ -37,7 +37,7 @@ All codes and results are in Github
          = trace(Λ)
          = Σ(eigenvalues)
 		```
-2. {{< wikilink "method-of-lagrangian-multiplier" >}}
+2. Method of Lagrangian multiplier {{< wikilink "method-of-lagrangian-multiplier" >}}
 3. Optimal Brain Quantization (OBQ) generalized Optimal Brain Surgeon (OBS)'s pruning framework to quantization.
 
 # 1. GPTQ Explanation
@@ -83,16 +83,16 @@ So, to make $H_{i+1}$ not depend on $H_{i}$ but be derived from the initial inve
 ### 1-2-1. How the Cholesky decomposition solves the accumulation of floating-point error
 #### 1-2-1-1. $H^{-1}_{i+1}$ obtained naively from the $H^{-1}_{i}$ case
 We saw that $H^{-1}_{i+1}$ has accumulated floating-point error that $H^{-1}_{i}$, $H^{-1}_{i-1}$, and $H^{-1}_{i-2}$, ... calculations caused.
-Suppose $M = H^{-1} = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}a & b^T \\ b & C \\\end{array}\right)$. Then, by the formula for the inverse of a block matrix, $(M^{-1})_{22} = (C-ba^{-1}b^T)^{-1}$. Because $(M^{-1})_{22}=H_{2}$, $H_{2}^{-1}=C-ba^{-1}b^T$.
+Suppose $M = H^{-1} = \left(\begin{array}{cccc}a & b^T \\ b & C \\\end{array}\right)$. Then, by the formula for the inverse of a block matrix, $(M^{-1})_{22} = (C-ba^{-1}b^T)^{-1}$. Because $(M^{-1})_{22}=H_{2}$, $H_{2}^{-1}=C-ba^{-1}b^T$.
 The other indices of the matrix are obtained in this way.
 
 #### 1-2-1-2. $H^{-1}_{i+1}$ obtained from the Cholesky decomposition case
-Suppose $A_1 = H^{-1}_1$ and $A_1=A = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}a & b^T \\ b & C \\\end{array}\right) = LL^T = R^TR$. Then $A_1 = R^TR = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}r_{11} & 0 \\ r_{12}^T & R_{22}^T \\\end{array}\right) \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}r_{11} & r_{12} \\ 0 & R_{22} \\\end{array}\right)$.
+Suppose $A_1 = H^{-1}_1$ and $A_1=A = \left(\begin{array}{cccc}a & b^T \\ b & C \\\end{array}\right) = LL^T = R^TR$. Then $A_1 = R^TR = \left(\begin{array}{cccc}r_{11} & 0 \\ r_{12}^T & R_{22}^T \\\end{array}\right) \left(\begin{array}{cccc}r_{11} & r_{12} \\ 0 & R_{22} \\\end{array}\right)$.
 - $a$: It's a scalar. $a=r_{11}^2$
 - $b$: It's a column vector, $b=r_{12}^Tr_{11}$
 - $C$: It's a block matrix, $r_{12}^Tr_{12} + R_{22}^TR_{22}$
 - $L$: Component of Cholesky decomposition
-- $R$: $L^T = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}r_{11} & r_{12} \\ 0 & R_{22} \\\end{array}\right)$
+- $R$: $L^T = \left(\begin{array}{cccc}r_{11} & r_{12} \\ 0 & R_{22} \\\end{array}\right)$
 Then, 
 1. $A_2 = H_2^{-1} = C-\frac{bb^T}{a}$
 2. $\frac{bb^T}{a} = \frac{(r_{12}^Tr_{11})(r_{12}^Tr_{11})^T}{r_{11}^2} = r_{12}^Tr_{12}$
@@ -100,12 +100,12 @@ So, $A_2 = H_2^{-1} = r_{12}^Tr_{12} + R_{22}^TR_{22} - r_{12}^Tr_{12} = R_{22}^
 This means that once the $R^TR$ is obtained at initial state, $A_1$, the squared right-bottom $R_{ii}$ matrix is utilized.
 
 **But**, there's a simpler, more efficient way to get $H_{2}^{-1}$ than calculating $R_{22}^TR_{22}$.
-Suppose $H^{-1} = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}H^{-1}_{11} & H^{-1}_{12} \\ H^{-1}_{21} & H^{-1}_{22} \\\end{array}\right) = R^TR$. Then it's $\require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}r^2_{11} & r_{11}r_{12} \\ r_{11}r^T_{12} & r_{12}^Tr_{12} + R_{22}^TR_{22} \\\end{array}\right)$.
+Suppose $H^{-1} = \left(\begin{array}{cccc}H^{-1}_{11} & H^{-1}_{12} \\ H^{-1}_{21} & H^{-1}_{22} \\\end{array}\right) = R^TR$. Then it's $\left(\begin{array}{cccc}r^2_{11} & r_{11}r_{12} \\ r_{11}r^T_{12} & r_{12}^Tr_{12} + R_{22}^TR_{22} \\\end{array}\right)$.
 Because we already have $r_{12}^Tr_{12} + R_{22}^TR_{22}$ which is $H^{-1}[2,2]$, $H_2^{-1}$ is obtained by $H^{-1}_{22}-r_{12}^Tr_{12} = H^{-1}_{22}-R[1,2]^TR[1,2]$.
 
 **Also**, we don't even need to calculate $H^{-1}_{2}-R[1,2]^TR[1,2]$ because what we need from $H_{2}^{-1}$ are only the $H_{2}^{-1}[1,1]$ and $H_{2}^{-1}[:,1]$.
 The formula below shows that we need only the first row of $R$.
-Suppose $R=\require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}r_{11} & r_{12} & r_{13} \\ 0 & r_{22} & r_{23} \\ 0 & 0 & r_{33} \\\end{array}\right)$ and $H_{2}^{-1} = R^TR = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}r^2_{11} & r_{11}r_{12} & r_{11}r_{13} \\ r_{11}r_{12} & r_{12}^2+r^2_{22} & r_{12}r_{13}+r_{22}r_{23} \\ r_{11}r_{13} & r_{13}r_{12} + r_{23}r_{22} & r_{13}^2 + r_{23}^2 + r_{33}^2 \\\end{array}\right)$.
+Suppose $R=\left(\begin{array}{cccc}r_{11} & r_{12} & r_{13} \\ 0 & r_{22} & r_{23} \\ 0 & 0 & r_{33} \\\end{array}\right)$ and $H_{2}^{-1} = R^TR = \left(\begin{array}{cccc}r^2_{11} & r_{11}r_{12} & r_{11}r_{13} \\ r_{11}r_{12} & r_{12}^2+r^2_{22} & r_{12}r_{13}+r_{22}r_{23} \\ r_{11}r_{13} & r_{13}r_{12} + r_{23}r_{22} & r_{13}^2 + r_{23}^2 + r_{33}^2 \\\end{array}\right)$.
 - $H_{2}^{-1}[1,1]$: It's $r_{11}^2$
 - $H_{2}^{-1}[:,1]$: It's $r_{11} * R[1, :]^T$
 
@@ -127,34 +127,34 @@ The steps of GPTQ are the following
 
 ## 2-1. Example of the calculation steps
 Suppose there are three layers, $W_1$, $W_2$, and $W_3$. I'll describe how the weights are changed.
-- $W_{i} = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}w_{i1} & w_{i2} & w_{i3} & ... \\\end{array}\right)$
+- $W_{i} = \left(\begin{array}{cccc}w_{i1} & w_{i2} & w_{i3} & ... \\\end{array}\right)$
 	- $w_{ij}$: A column vector of $j$-th weight in the $i$-th layer. **This $w$ is not the $w$ in Section 1. They are unrelated.**
 ### 2-1-1. One weight update (Inner loop of $W_1$)
 The input activation of $W_1$, $X_1$, is obtained
 #### 2-1-1-1. Step 1
 The first column of $W_1$ is updated using $X_1$.
-$W_{1} = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}w'_{11} & w_{12} & w_{13} & ... \\\end{array}\right)$
+$W_{1} = \left(\begin{array}{cccc}w'_{11} & w_{12} & w_{13} & ... \\\end{array}\right)$
 - $w_{ij}$: The unquantized weight column
 - $w'_{ij}$: The quantized weight column
 #### 2-1-1-2. Step 2
 The second column of $W_1$ is updated.
-$W_{1} = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}w'_{11} & w'_{12} & w_{13} & ... \\\end{array}\right)$
+$W_{1} = \left(\begin{array}{cccc}w'_{11} & w'_{12} & w_{13} & ... \\\end{array}\right)$
 #### 2-1-1-3. Step 3
 The third column of $W_1$ is updated.
-$W_{1} = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}w'_{11} & w'_{12} & w'_{13} & ... \\\end{array}\right)$
+$W_{1} = \left(\begin{array}{cccc}w'_{11} & w'_{12} & w'_{13} & ... \\\end{array}\right)$
 
 ### 2-1-2. Several weights update (Outer loop)
 #### 2-1-2-1. Step 1 (Layer 1 update)
 The input activation of $W_1$, $X_1$, is obtained
 The whole $W_1$ is updated using $X_1$.
-$W'_{1} = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}w'_{11} & w'_{12} & w'_{13} & ... \\\end{array}\right)$
+$W'_{1} = \left(\begin{array}{cccc}w'_{11} & w'_{12} & w'_{13} & ... \\\end{array}\right)$
 - $W'_1$: The quantized weight (layer 1)
 - $w'_{1j}$: The quantized weight column in the layer 1
 
 #### 2-1-2-2. Step 2 (Layer 2 update)
 The input activation of $W_2$, $X_2$, is obtained after $W_1$ quantization is done.
 The whole $W_2$ is updated using $X_2$.
-$W'_{2} = \require{colortbl}\newcommand{\x}{\times}\newcommand{\y}{\cellcolor{green}}\left(\begin{array}{cccc}w'_{21} & w'_{22} & w'_{23} & ... \\\end{array}\right)$
+$W'_{2} = \left(\begin{array}{cccc}w'_{21} & w'_{22} & w'_{23} & ... \\\end{array}\right)$
 - $W'_2$: The quantized weight (layer 2)
 - $w'_{2j}$: The quantized weight column in the layer 2
 
