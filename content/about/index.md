@@ -14,6 +14,8 @@ This blog is a personal record of what I learn, implement, and investigate while
 
 These posts are intended as learning notes rather than authoritative technical documentation. I'm also not a native English speaker, so the writing may contain grammatical errors. Constructive feedback and corrections are always welcome.
 
+[See all posts →](/posts/)
+
 # What I'm doing here
 This blog is organized around two axes:
 
@@ -44,8 +46,6 @@ Most of the experiment code is in <a href="https://github.com/winterstar67/model
 - Finding: Kernel selection was sensitive to the alignment of a particular GEMM dimension rather than to every tensor dimension.
 
 [Other Hands-on Experiments](/categories/experiments/)
-
-[All posts](/posts/)
 
 # Contact
 <!-- 남기고 싶은 것만 두고 나머지 줄은 삭제 -->
