@@ -26,7 +26,9 @@ This blog is organized around two axes:
 <p class="note">Posts here are listed in descending order of importance.<br>
 Most of the experiment code is in <a href="https://github.com/winterstar67/AI-Experiments">https://github.com/winterstar67/AI-Experiments</a></p>
 
-## [KV Cache Analysis](/posts/kv-cache-implementation/) {#kv-cache-analysis}
+## KV Cache Analysis {#kv-cache-analysis}
+[See post →](/posts/kv-cache-implementation/)
+
 <img class="thumb" src="kv-cache.png" alt="KV Cache">
 
 - Question:
@@ -38,14 +40,18 @@ Most of the experiment code is in <a href="https://github.com/winterstar67/AI-Ex
 	- The QKᵀ matmul was approximately 93× faster at T=1023.
 - Finding: KV cache increased the speed substantially, but the inefficiency of GEMV, which is memory-bandwidth-bound, causes a lower speedup than expected.
 
-## [Kernel Investigation](/posts/kernel-investigation/) {#kernel-investigation}
+## Kernel Investigation {#kernel-investigation}
+[See post →](/posts/kernel-investigation/)
+
 <img class="thumb" src="kernel-investigation.png" alt="Kernel Investigation">
 
 - Question: Do batch size and token length change kernel selection?
 - Result: In the test, the vocab size padding changed kernel selection while batch size and token length didn't.
 - Finding: Kernel selection was sensitive to the alignment of a particular GEMM dimension rather than to every tensor dimension.
 
-## [A Larger Batch Size Doesn't Always Increase Inference Speed](/posts/a-larger-batch-size-does-not-always-increase-inference-speed/) {#batch-size-inference-speed}
+## A Larger Batch Size Doesn't Always Increase Inference Speed {#batch-size-inference-speed}
+[See post →](/posts/a-larger-batch-size-does-not-always-increase-inference-speed/)
+
 <img class="thumb" src="batch-size-vs-inference-speed.png" alt="Batch Size vs Inference Speed">
 
 - Question: Why isn't inference at batch size B=64 faster than at B=1?
@@ -57,4 +63,4 @@ Most of the experiment code is in <a href="https://github.com/winterstar67/AI-Ex
 # Contact
 <!-- 남기고 싶은 것만 두고 나머지 줄은 삭제 -->
 - GitHub: [winterstar67](https://github.com/winterstar67)
-- Email: [winterstar6778@gmail.com](mailto:winterstar6778@gmail.com)
+- Email: [winterstar677@gmail.com](mailto:winterstar677@gmail.com)
