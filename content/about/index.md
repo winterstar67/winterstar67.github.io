@@ -45,6 +45,13 @@ Most of the experiment code is in <a href="https://github.com/winterstar67/AI-Ex
 - Result: In the test, the vocab size padding changed kernel selection while batch size and token length didn't.
 - Finding: Kernel selection was sensitive to the alignment of a particular GEMM dimension rather than to every tensor dimension.
 
+## [A Larger Batch Size Doesn't Always Increase Inference Speed](/posts/a-larger-batch-size-does-not-always-increase-inference-speed/) {#batch-size-inference-speed}
+<img class="thumb" src="batch-size-vs-inference-speed.png" alt="Batch Size vs Inference Speed">
+
+- Question: Why isn't inference at batch size B=64 faster than at B=1?
+- Result: B=64 hit the power limit, causing clock throttling.
+- Finding: Compute/memory throughput isn't the only factor in inference efficiency — power-cap-driven clock throttling also needs to be monitored.
+
 [Other Hands-on Experiments](/categories/experiments/)
 
 # Contact
