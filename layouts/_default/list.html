@@ -1,0 +1,128 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{ if not .IsSection }}
+<p class="intro">{{ len .Pages }} {{ if eq (len .Pages) 1 }}post{{ else }}posts{{ end }} in this category</p>
+{{ end }}
+
+{{ $allCats := slice }}
+{{ if .IsSection }}
+  {{ range .Pages }}
+    {{ range .Params.categories }}
+      {{ $allCats = $allCats | append . }}
+    {{ end }}
+  {{ end }}
+  {{ $allCats = $allCats | uniq | sort }}
+{{ end }}
+
+<input type="search" id="list-search" class="inline-search" placeholder="Filter posts…" autocomplete="off">
+
+{{ if gt (len $allCats) 0 }}
+<div class="cat-filter">
+  <button class="cat-btn active" data-cat="all">All</button>
+  {{ range $allCats }}
+  <button class="cat-btn" data-cat="{{ . | urlize }}">{{ . }}</button>
+  {{ end }}
+</div>
+{{ end }}
+
+<ul class="post-list" id="post-list">
+  {{ range .Pages.ByDate.Reverse }}
+  <li data-cats="{{ range .Params.categories }}{{ . | urlize }} {{ end }}" data-title="{{ .Title | lower }}">
+    <span class="date">{{ .Date.Format "2006-01-02" }}</span>
+    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    {{ with .Params.categories }}
+    <span class="post-cats">
+      {{ range . }}<a href="/categories/{{ . | urlize }}/" class="cat-badge">{{ . }}</a>{{ end }}
+    </span>
+    {{ end }}
+  </li>
+  {{ end }}
+</ul>
+
+<div class="pagination" id="pagination"></div>
+
+<script>
+(function () {
+  var PAGE_SIZE   = 10;
+  var WIN_SIZE    = 9;
+  var currentPage = 1;
+  var input       = document.getElementById('list-search');
+  var buttons     = document.querySelectorAll('.cat-btn');
+  var items       = Array.prototype.slice.call(document.querySelectorAll('#post-list li'));
+  var pagination  = document.getElementById('pagination');
+
+  function getVisible() {
+    var q   = input.value.toLowerCase().trim();
+    var cat = (document.querySelector('.cat-btn.active') || {dataset:{cat:'all'}}).dataset.cat;
+    return items.filter(function (item) {
+      var title    = item.dataset.title || '';
+      var cats     = (item.dataset.cats || '').trim().split(/\s+/);
+      var matchTxt = !q || title.indexOf(q) !== -1;
+      var matchCat = cat === 'all' || cats.indexOf(cat) !== -1;
+      return matchTxt && matchCat;
+    });
+  }
+
+  function render() {
+    var visible = getVisible();
+    var totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    var start = (currentPage - 1) * PAGE_SIZE;
+    var end   = start + PAGE_SIZE;
+
+    items.forEach(function (item) { item.style.display = 'none'; });
+    visible.slice(start, end).forEach(function (item) { item.style.display = ''; });
+
+    pagination.innerHTML = '';
+    if (totalPages <= 1) return;
+
+    var winStart = Math.floor((currentPage - 1) / WIN_SIZE) * WIN_SIZE + 1;
+    var winEnd   = Math.min(winStart + WIN_SIZE - 1, totalPages);
+
+    var prev = document.createElement('button');
+    prev.textContent = '←';
+    prev.className = 'page-jump';
+    prev.disabled = winStart === 1;
+    prev.addEventListener('click', function () {
+      currentPage = winStart - WIN_SIZE;
+      render();
+    });
+    pagination.appendChild(prev);
+
+    for (var i = winStart; i <= winEnd; i++) {
+      (function (p) {
+        var btn = document.createElement('button');
+        btn.textContent = p;
+        btn.className = 'page-num' + (p === currentPage ? ' active' : '');
+        btn.addEventListener('click', function () { currentPage = p; render(); });
+        pagination.appendChild(btn);
+      })(i);
+    }
+
+    var next = document.createElement('button');
+    next.textContent = '→';
+    next.className = 'page-jump';
+    next.disabled = winEnd >= totalPages;
+    next.addEventListener('click', function () {
+      currentPage = winStart + WIN_SIZE;
+      render();
+    });
+    pagination.appendChild(next);
+  }
+
+  function reset() { currentPage = 1; render(); }
+
+  input.addEventListener('input', reset);
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      buttons.forEach(function (b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      reset();
+    });
+  });
+
+  render();
+}());
+</script>
+{{ end }}

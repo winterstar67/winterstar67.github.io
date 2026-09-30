@@ -1,0 +1,14 @@
+{{- $maxLevel := 2 -}}
+{{- $out := "" -}}
+{{- range . -}}
+  {{- $title := .Title | plainify -}}
+  {{- if and (findRE "^[0-9]" $title 1) (le .Level $maxLevel) -}}
+    {{- $child := partial "toc-node.html" .Headings -}}
+    {{- $out = printf "%s<li><a href=\"#%s\">%s</a>%s</li>" $out .ID .Title $child -}}
+  {{- end -}}
+{{- end -}}
+{{- $result := "" -}}
+{{- if $out -}}
+  {{- $result = printf "<ul>%s</ul>" $out -}}
+{{- end -}}
+{{- return $result -}}

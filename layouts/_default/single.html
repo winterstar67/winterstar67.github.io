@@ -1,0 +1,119 @@
+{{ define "main" }}
+<article>
+  <h1>{{ .Title }}</h1>
+  {{ if ne .Type "about" }}
+  <div class="post-meta">
+    <span class="date">Created {{ .Date.Format "2006-01-02" }}</span>
+    {{ if not (.Lastmod.Equal .Date) }}
+    <span class="date edited">Edited {{ .Lastmod.Format "2006-01-02" }}</span>
+    {{ end }}
+    {{ with .Params.categories }}
+    <span class="categories">
+      {{ range . }}<a href="/categories/{{ . | urlize }}/" class="cat-badge">{{ . }}</a>{{ end }}
+    </span>
+    {{ end }}
+    {{ with .Params.tags }}
+    <span class="tags">
+      {{ range . }}<a href="/tags/{{ . | urlize }}/">#{{ . }}</a> {{ end }}
+    </span>
+    {{ end }}
+  </div>
+  {{ end }}
+  {{ if eq .Type "about" }}
+  {{ if .TableOfContents }}
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    {{ (.TableOfContents | replaceRE `<a href="(#[^"]*)"><a href="[^"]*">([^<]+)</a></a>` `<a href="$1">$2</a>`) | safeHTML }}
+  </div>
+  {{ end }}
+  {{ else }}
+  {{ $tocHTML := partial "toc-node.html" .Fragments.Headings }}
+  {{ if $tocHTML }}
+  <div class="toc">
+    <div class="toc-title">Contents</div>
+    <nav id="TableOfContents">{{ $tocHTML | safeHTML }}</nav>
+  </div>
+  {{ end }}
+  {{ end }}
+  <div class="content">
+    {{ .Content }}
+  </div>
+
+  {{/* ── Referenced by: scan other posts' content for href links to this page ── */}}
+  {{ $current := . }}
+  {{ $s := newScratch }}
+  {{ $s.Set "backlinks" (slice) }}
+  {{ range $current.Site.RegularPages }}
+    {{ $page := . }}
+    {{ if ne $page.RelPermalink $current.RelPermalink }}
+      {{ $s.Set "found" false }}
+      {{ range findRE `href="[^"]*"` $page.Content }}
+        {{ $href := . | replaceRE `href="([^"]*)"` "$1" }}
+        {{ if eq $href $current.RelPermalink }}
+          {{ $s.Set "found" true }}
+        {{ end }}
+      {{ end }}
+      {{ if $s.Get "found" }}
+        {{ $s.Set "backlinks" ($s.Get "backlinks" | append $page) }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+  {{ $backlinks := $s.Get "backlinks" }}
+  {{ if $backlinks }}
+  <div class="backlinks">
+    <h3>Referenced by</h3>
+    <ul class="post-list">
+      {{ range $backlinks }}
+      <li>
+        <span class="date">{{ .Date.Format "2006-01-02" }}</span>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </li>
+      {{ end }}
+    </ul>
+  </div>
+  {{ end }}
+
+  <div class="post-nav">
+    {{ with .PrevInSection }}
+    <a href="{{ .RelPermalink }}">← {{ .Title }}</a>
+    {{ end }}
+    {{ with .NextInSection }}
+    <a href="{{ .RelPermalink }}" style="margin-left:auto">{{ .Title }} →</a>
+    {{ end }}
+  </div>
+
+</article>
+<script>
+(function () {
+  function addCollapse(container, items, limit) {
+    if (items.length <= limit) return;
+    var extra = items.length - limit;
+    for (var i = limit; i < items.length; i++) {
+      items[i].classList.add('collapse-hidden');
+    }
+    var expanded = false;
+    var btn = document.createElement('button');
+    btn.className = 'show-more-btn';
+    btn.textContent = '+' + extra + ' more';
+    btn.addEventListener('click', function () {
+      expanded = !expanded;
+      for (var i = limit; i < items.length; i++) {
+        items[i].classList.toggle('collapse-hidden', !expanded);
+      }
+      btn.textContent = expanded ? 'show less' : '+' + extra + ' more';
+    });
+    container.appendChild(btn);
+  }
+
+  // Tags in post meta
+  document.querySelectorAll('.tags').forEach(function (el) {
+    addCollapse(el, Array.from(el.querySelectorAll('a')), 5);
+  });
+
+  // Referenced by
+  document.querySelectorAll('.backlinks').forEach(function (el) {
+    addCollapse(el, Array.from(el.querySelectorAll('li')), 5);
+  });
+}());
+</script>
+{{ end }}
