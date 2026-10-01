@@ -8,6 +8,8 @@ categories: ["Experiments"]
 description: ""
 ---
 
+![Batch Size vs Inference Speed](batch-size-vs-inference-speed.png)
+
 **This experiment was conducted using Claude code**
 
 All code and experiments are on [GitHub](https://github.com/winterstar67/AI-Experiments/tree/main/Batch%20Size%20vs%20Inference%20Speed)

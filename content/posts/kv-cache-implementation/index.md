@@ -8,6 +8,8 @@ categories: ["Experiments"]
 description: ""
 ---
 
+![KV Cache](kv-cache.png)
+
 The implementation and experiment code is on [GitHub](https://github.com/winterstar67/AI-Experiments/tree/main/KV%20Cache)
 
 # 1. Introduction
