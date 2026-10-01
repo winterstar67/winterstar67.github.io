@@ -137,7 +137,3 @@ But, it doesn't mean that the batch size doesn't affect kernel selection at all.
 - For example, in the two non-padded FP16 cases, the results showed different kernels
 	- `...cutlass_75_tensorop_f16_s1688gemm_f16_128x256_tn_align1`
 	- `...cutlass_75_tensorop_f16_s1688gemm_f16_256x128_tn_align1`
-
-# 7. What I learned
-When we try to choose an efficient kernel, we must consider whether the GPU supports the Tensor Core of that dtype, the column-major based alignment in cuBLAS, and the dtype of the data we use and its byte size, etc.
-- cuBLAS whose version is 11.0 or later can use Tensor Core for FP16 even if it's not aligned. But still aligning data into 16 bytes is important to take a more efficient kernel. So we should consider a multiple of $\frac{16 \text{ bytes}}{\text{dtype's bytes}}$ to utilize the efficient kernel.

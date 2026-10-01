@@ -229,13 +229,6 @@ In this situation, to get the speed up effect by increasing batch size, the comp
 	- Choosing more effective kernel
 	- Decreasing dtype
 
-# 6. What I learned
-- Clock throttling lowers the GPU clock, and it can be triggered by either heat or power limits.
-- Running `ncu` with its default settings locks the clock to 585 MHz during profiling (confirmed on T4; other GPUs need to be checked).
-- A controlled experiment that fixes the clock made it possible to identify the root cause.
-- When analyzing speed, the clock itself must be considered as a fundamental factor, in addition to compute/memory throughput.
-- I studied launch overhead and GPU clock behavior along the way.
-
 # Appendix
 ## A. Perfetto UI results
 ### Batch 1
