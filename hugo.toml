@@ -1,0 +1,35 @@
+baseURL = "https://winterstar67.github.io/"
+title = "Winterstar"
+languageCode = "en"
+paginate = 20
+enableRobotsTXT = true
+enableGitInfo   = true
+buildFuture     = true
+
+[outputs]
+  home = ["HTML", "JSON"]
+
+[params]
+  math = true
+  ShowLastMod = true
+  description = "Archive of Deep learning study and analysis of code"
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+
+[markup]
+  [markup.tableOfContents]
+    startLevel = 1
+    endLevel = 2
+  [markup.highlight]
+    noClasses = true
+    style = "monokai"
+  [markup.goldmark.renderer]
+    unsafe = true
+    hardWraps = true
+  [markup.goldmark.extensions.passthrough]
+    enable = true
+    [markup.goldmark.extensions.passthrough.delimiters]
+      block = [["$$", "$$"]]
+      inline = [["$", "$"]]

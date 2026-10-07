@@ -1,0 +1,12 @@
+{{- $name := .Get 0 -}}
+{{- $display := .Get 1 | default "" -}}
+{{- range .Site.RegularPages -}}
+  {{- $slug := path.Base (strings.TrimSuffix "/" .RelPermalink) -}}
+  {{- if eq $slug $name -}}
+    {{- if $display -}}
+      <a href="{{ .RelPermalink }}">{{ $display }}</a>
+    {{- else -}}
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
